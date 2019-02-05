@@ -2,9 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class Calculator extends JFrame implements ActionListener {
+
+    private StringBuilder stringBuilder;
 
     private JButton buttonOne;
     private JButton buttonTwo;
@@ -29,6 +30,7 @@ public class Calculator extends JFrame implements ActionListener {
         add(rootPanel);
 
         setButtonListeners();
+        stringBuilder = new StringBuilder();
 
     }
 
@@ -44,6 +46,9 @@ public class Calculator extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
             Object source = e.getSource();
-            if (source instanceof JButton) System.out.println(e.getActionCommand());
+            if (source instanceof JButton) {
+                stringBuilder.append(e.getActionCommand());
+                displayTextField.setText(stringBuilder.toString());
+            }
     }
 }
