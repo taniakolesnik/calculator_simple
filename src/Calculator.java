@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 
 public class Calculator extends JFrame implements ActionListener {
 
-    private StringBuilder stringBuilder;
-
     private JButton buttonOne;
     private JButton buttonTwo;
     private JButton buttonThree;
@@ -17,12 +15,25 @@ public class Calculator extends JFrame implements ActionListener {
     private JButton buttonEight;
     private JButton buttonNine;
     private JButton buttonZero;
+    private JButton buttonAdd;
+    private JButton buttonResult;
+    private JButton buttonDivide;
+    private JButton buttonSubstract;
+    private JButton buttonMultiply;
+    private double numberOne;
+    private double numberTwo;
+
+    private StringBuilder summaryBuilder;
+    private StringBuilder inputBuilder;
 
     private JButton buttonDelete;
-    private JButton buttonDelimeter;
+    private JButton buttonDelimiter;
     private JPanel displayPanel;
     private JTextField displayTextField;
+    private JTextField previewTextField;
     private JPanel rootPanel;
+    private JPanel mathPanel;
+
 
     public Calculator() throws HeadlessException {
         setTitle("Calculator");
@@ -30,13 +41,20 @@ public class Calculator extends JFrame implements ActionListener {
         add(rootPanel);
 
         setButtonListeners();
-        stringBuilder = new StringBuilder();
+        summaryBuilder = new StringBuilder();
+        inputBuilder = new StringBuilder();
 
     }
 
     private void setButtonListeners() {
-        for (Component component : rootPanel.getComponents()){
-            if (component.getClass() == JButton.class){
+        for (Component component : rootPanel.getComponents()) {
+            if (component.getClass() == JButton.class) {
+                ((JButton) component).addActionListener(this);
+            }
+        }
+
+        for (Component component : mathPanel.getComponents()) {
+            if (component.getClass() == JButton.class) {
                 ((JButton) component).addActionListener(this);
             }
         }
@@ -45,10 +63,42 @@ public class Calculator extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-            Object source = e.getSource();
-            if (source instanceof JButton) {
-                stringBuilder.append(e.getActionCommand());
-                displayTextField.setText(stringBuilder.toString());
+        String value = e.getActionCommand();
+        Object source = e.getSource();
+
+        if (source instanceof JButton) {
+
+            switch (value) {
+
+                case "Del":
+                    if (!inputBuilder.toString().isEmpty()) {
+                        inputBuilder.deleteCharAt(inputBuilder.length() - 1);
+                    }
+                    displayTextField.setText(inputBuilder.toString());
+                    break;
+
+                case "+":
+                    numberOne = returnNumber(inputBuilder);
+                    inputBuilder.setLength(0);
+                    break;
+
+                case "=":
+                    numberTwo = returnNumber(inputBuilder);
+                    double sum = (double) (numberOne + numberTwo);
+                    numberOne = sum;
+                    displayTextField.setText(String.valueOf(sum));
+                    break;
+                default:
+                    inputBuilder.append(value);
+                    displayTextField.setText(inputBuilder.toString());
             }
+
+
+        }
     }
+
+    private double returnNumber(StringBuilder stringBuilder) {
+        return Double.parseDouble(stringBuilder.toString());
+    }
+
 }
