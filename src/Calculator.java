@@ -23,5 +23,6 @@ public class Calculator extends JFrame {
         setTitle("Calculator");
         setSize(400, 300);
         add(rootPanel);
+        System.out.println("Test");
     }
 }
