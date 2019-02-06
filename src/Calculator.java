@@ -22,10 +22,10 @@ public class Calculator extends JFrame implements ActionListener {
     private JButton buttonMultiply;
     private double numberOne;
     private double numberTwo;
-
     private StringBuilder summaryBuilder;
     private StringBuilder inputBuilder;
-    private String operation;
+    private String operation = "";
+    private String prevOperation = "";
 
     private JButton buttonDelete;
     private JButton buttonDelimiter;
@@ -82,42 +82,84 @@ public class Calculator extends JFrame implements ActionListener {
                 case "-":
                 case "/":
                 case "*":
-                    operation = value;
-                    numberOne = returnNumber(inputBuilder);
-                    inputBuilder.setLength(0);
-                    break;
 
-                case "=":
-                    double result = 0.0;
-                    numberTwo = returnNumber(inputBuilder);
-
-                    switch (operation) {
-                        case "+":
-                            result = numberOne + numberTwo;
-                            break;
-                        case "-":
-                            result = numberOne - numberTwo;
-                            break;
-                        case "/":
-                            result = numberOne / numberTwo;
-                            break;
-                        case "*":
-                            result = numberOne * numberTwo;
-                            break;
-                    }
-                    if (result % 1 == 0){
-                        displayTextField.setText(String.valueOf((int)result));
+                    if (!prevOperation.equals("")){
+                        System.out.println("CASE operation IF");
+                        prevOperation = "";
+                        operation = value;
+                        inputBuilder.setLength(0);
+                        buttonDelimiter.setEnabled(false);
+                        buttonDelete.setEnabled(false);
+                        getResult();
+                    } else if(prevOperation.equals("=")) {
+                        System.out.println("CASE operation ELSE IF");
+                        prevOperation = value;
+                        operation = value;
+                        inputBuilder.setLength(0);
+                        buttonDelimiter.setEnabled(false);
+                        buttonDelete.setEnabled(false);
                     } else {
-                        displayTextField.setText(String.valueOf(result));
+                        System.out.println("CASE operation ELSE");
+                        prevOperation = value;
+                        operation = value;
+                        numberOne = returnNumber(inputBuilder);
+                        inputBuilder.setLength(0);
+                        buttonDelimiter.setEnabled(false);
+                        buttonDelete.setEnabled(false);
+
+                }
+                    break;
+                case "=":
+                    if (!prevOperation.isEmpty()){
+                        System.out.println("CASE =");
+                        numberTwo = returnNumber(inputBuilder);
+                        buttonDelimiter.setEnabled(false);
+                        buttonDelete.setEnabled(false);
+                        getResult();
+                        prevOperation = value;
+                        operation=value;
                     }
+
                     break;
                 default:
+                    System.out.println("CASE DEFAULT");
+                    buttonDelimiter.setEnabled(true);
+                    buttonDelete.setEnabled(true);
                     inputBuilder.append(value);
                     displayTextField.setText(inputBuilder.toString());
             }
 
+            System.out.println("actionPerformed n1=" + numberOne + ";n2=" + numberTwo + "operation: "+ operation);
 
         }
+
+
+    }
+
+    private void getResult() {
+        double result = 0.0;
+        switch (operation) {
+            case "+":
+                result = numberOne + numberTwo;
+                break;
+            case "-":
+                result = numberOne - numberTwo;
+                break;
+            case "/":
+                result = numberOne / numberTwo;
+                break;
+            case "*":
+                result = numberOne * numberTwo;
+                break;
+
+        }
+        numberOne = result;
+        if (result % 1 == 0) {
+            displayTextField.setText(String.valueOf((int) result));
+        } else {
+            displayTextField.setText(String.valueOf(result));
+        }
+        System.out.println("getResult n1=" + numberOne + ";n2=" + numberTwo);
     }
 
     private double returnNumber(StringBuilder stringBuilder) {
