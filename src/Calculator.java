@@ -25,6 +25,7 @@ public class Calculator extends JFrame implements ActionListener {
 
     private StringBuilder summaryBuilder;
     private StringBuilder inputBuilder;
+    private String operation;
 
     private JButton buttonDelete;
     private JButton buttonDelimiter;
@@ -78,15 +79,37 @@ public class Calculator extends JFrame implements ActionListener {
                     break;
 
                 case "+":
+                case "-":
+                case "/":
+                case "*":
+                    operation = value;
                     numberOne = returnNumber(inputBuilder);
                     inputBuilder.setLength(0);
                     break;
 
                 case "=":
+                    double result = 0.0;
                     numberTwo = returnNumber(inputBuilder);
-                    double sum = (double) (numberOne + numberTwo);
-                    numberOne = sum;
-                    displayTextField.setText(String.valueOf(sum));
+
+                    switch (operation) {
+                        case "+":
+                            result = numberOne + numberTwo;
+                            break;
+                        case "-":
+                            result = numberOne - numberTwo;
+                            break;
+                        case "/":
+                            result = numberOne / numberTwo;
+                            break;
+                        case "*":
+                            result = numberOne * numberTwo;
+                            break;
+                    }
+                    if (result % 1 == 0){
+                        displayTextField.setText(String.valueOf((int)result));
+                    } else {
+                        displayTextField.setText(String.valueOf(result));
+                    }
                     break;
                 default:
                     inputBuilder.append(value);
