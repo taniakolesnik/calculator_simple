@@ -5,36 +5,20 @@ import java.awt.event.ActionListener;
 
 public class Calculator extends JFrame implements ActionListener {
 
-    private JButton buttonOne;
-    private JButton buttonTwo;
-    private JButton buttonThree;
-    private JButton buttonFour;
-    private JButton buttonFive;
-    private JButton buttonSix;
-    private JButton buttonSeven;
-    private JButton buttonEight;
-    private JButton buttonNine;
-    private JButton buttonZero;
-    private JButton buttonAdd;
-    private JButton buttonResult;
-    private JButton buttonDivide;
-    private JButton buttonSubstract;
-    private JButton buttonMultiply;
-    private double numberOne;
-    private double numberTwo;
-    private StringBuilder inputBuilder;
-    private boolean canProceedWithOperation = false;
-    private boolean isNumberOneSet;
-    private boolean isNumberTwoSet;
-    private String mathOperation;
-
-    private JButton buttonDelete;
-    private JButton buttonDelimiter;
     private JPanel displayPanel;
     private JTextField displayTextField;
+
     private JPanel rootPanel;
+    private JButton buttonOne,buttonTwo,buttonThree,buttonFour,buttonFive,buttonSix,buttonSeven,buttonEight,buttonNine,buttonZero;
+    private JButton buttonDelete,buttonDelimiter;
+
     private JPanel mathPanel;
-    private JButton buttonReset;
+    private JButton buttonAdd,buttonResult,buttonDivide,buttonSubstract,buttonMultiply,buttonReset;
+
+    private StringBuilder inputBuilder;
+    private double numberOne, numberTwo;
+    private boolean isNumberOneSet, isNumberTwoSet, canProceedWithOperation = false;
+    private String mathOperation;
 
 
     public Calculator() throws HeadlessException {
@@ -94,7 +78,7 @@ public class Calculator extends JFrame implements ActionListener {
                             if (inputBuilder.length() != 0) { // get number One
                                 numberOne = returnNumber(inputBuilder);
                                 isNumberOneSet = true;
-                                inputBuilder.setLength(0); //clean inputbuilder
+                                inputBuilder.setLength(0);
                                 buttonDelimiter.setEnabled(true);
                                 buttonDelete.setEnabled(false);
                             }
@@ -139,16 +123,29 @@ public class Calculator extends JFrame implements ActionListener {
                     if (!inputBuilder.toString().startsWith(".")){
                         buttonDelimiter.setEnabled(false);
                     }
-
                 default:
-                    canProceedWithOperation = true;
-                    buttonDelete.setEnabled(true);
-                    inputBuilder.append(value);
-                    displayTextField.setText(inputBuilder.toString());
+                    display(value);
             }
         }
 
 
+    }
+
+    private void display(String value) {
+        System.out.println(value);
+        canProceedWithOperation = true;
+        buttonDelete.setEnabled(true);
+        if (value.equals("C")){
+            inputBuilder.setLength(0);
+            value = "0";
+        }
+        if (inputBuilder.length()!=0){
+            if (inputBuilder.charAt(0)=='0'){
+                inputBuilder.deleteCharAt(0);
+            }
+        }
+        inputBuilder.append(value);
+        displayTextField.setText(inputBuilder.toString());
     }
 
     private void getResult(String value) {
